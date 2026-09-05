@@ -1526,7 +1526,7 @@ async function deleteMyAvailability(id){
   await loadMyAvailability();
 }
 
-function changeAvailabilityWeek(days){
+async function changeAvailabilityWeek(days){
   await ensureNextWeekAvailability();
   const input=document.getElementById('availabilityFilterFrom');
   const current=mondayOf(input?.value||localDateISO());
@@ -1536,6 +1536,7 @@ function changeAvailabilityWeek(days){
 
 async function ensureNextWeekAvailability(){if(!isManagerMode())return 0;const {data,error}=await sb.rpc('ensure_next_week_availability');if(error){console.warn(error.message);return 0;}return Number(data||0);}
 async function loadManagerAvailability(){
+  await ensureNextWeekAvailability();
   const body=document.getElementById('managerAvailabilityRows');
   const grid=document.getElementById('managerAvailabilityWeeklyGrid');
   if(!body||!grid||!isManagerMode())return;
